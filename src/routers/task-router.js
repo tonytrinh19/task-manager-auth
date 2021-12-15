@@ -21,22 +21,27 @@ router.post('/tasks', auth, async (req, res) => {
     // task.save().then(task => res.status(201).send(task)).catch(error => res.status(400).send(error))
 })
 
-// GET /tasks?completed=true
-// Add filtering to the request pararms.
+// GET /tasks?completed=true. Add filtering to the request pararms.
+// GET /tasks?limit=10&skip=10. Limit: number of queries per page, skip: number of queries skipped.
 router.get('/tasks', auth, async (req, res) => {
     try {
         // authenticate the user logged in, only show tasks that belong to currently logged in user
         // const tasks = await Task.find({creator: req.user._id})
-        
+
         const match = {}
 
         if (req.query.completed) {
             match.completed = req.query.completed === 'true'
         }
-        
+
+
         await req.user.populate({
             path: 'tasks',
             match,
+            options: {
+                limit: parseInt(req.query.limit),
+                skip: parseInt(req.query.skip),
+            },
         }).execPopulate()
         res.status(200).send(req.user.tasks)
     } catch (error) {
