@@ -48,6 +48,8 @@ const userSchema = mongoose.Schema({
             required: true
         }
     }]
+}, {
+    timestamps: true
 })
 
 // Virtual property, not actual data stored in db but relationship between 2 entities
@@ -58,7 +60,7 @@ userSchema.virtual('tasks', {
     foreignField: 'creator'
 })
 
-userSchema.methods.toJSON = function() {
+userSchema.methods.toJSON = function () {
     const user = this
     const userObject = user.toObject()
     // hide private data
@@ -68,10 +70,14 @@ userSchema.methods.toJSON = function() {
     return userObject
 }
 
-userSchema.methods.generateAuthToken = async function() {
+userSchema.methods.generateAuthToken = async function () {
     const user = this
-    const token = jwt.sign({_id: user._id.toString()}, 'tonytrinh19')
-    user.tokens = user.tokens.concat({token})
+    const token = jwt.sign({
+        _id: user._id.toString()
+    }, 'tonytrinh19')
+    user.tokens = user.tokens.concat({
+        token
+    })
     await user.save()
     return token
 }
@@ -101,7 +107,9 @@ userSchema.pre('save', async function (next) {
 userSchema.pre('remove', async function (next) {
     const user = this
 
-    await Task.deleteMany({creator: user._id})
+    await Task.deleteMany({
+        creator: user._id
+    })
 
     next()
 })

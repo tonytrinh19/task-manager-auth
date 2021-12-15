@@ -1,3 +1,6 @@
+const {
+    Timestamp
+} = require('mongodb')
 const mongoose = require('mongoose')
 
 const taskSchema = mongoose.Schema({
@@ -16,6 +19,8 @@ const taskSchema = mongoose.Schema({
         // Create reference so other can call it
         ref: 'User'
     }
+}, {
+    timestamps: true
 })
 
 const Task = mongoose.model('Task', taskSchema)
