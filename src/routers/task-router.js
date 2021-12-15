@@ -21,11 +21,24 @@ router.post('/tasks', auth, async (req, res) => {
     // task.save().then(task => res.status(201).send(task)).catch(error => res.status(400).send(error))
 })
 
+// GET /tasks?completed=true
+// Add filtering to the request pararms.
 router.get('/tasks', auth, async (req, res) => {
     try {
         // authenticate the user logged in, only show tasks that belong to currently logged in user
-        const tasks = await Task.find({creator: req.user._id})
-        res.status(200).send(tasks)
+        // const tasks = await Task.find({creator: req.user._id})
+        
+        const match = {}
+
+        if (req.query.completed) {
+            match.completed = req.query.completed === 'true'
+        }
+        
+        await req.user.populate({
+            path: 'tasks',
+            match,
+        }).execPopulate()
+        res.status(200).send(req.user.tasks)
     } catch (error) {
         res.status(500).send(error)
     }
@@ -38,7 +51,8 @@ router.get('/tasks/:id', auth, async (req, res) => {
     try {
         // task = await Task.findById(_id)
         const task = await Task.findOne({
-            _id, creator: req.user._id
+            _id,
+            creator: req.user._id
         })
         res.status(200).send(task)
     } catch (error) {
@@ -64,7 +78,10 @@ router.patch('/tasks/:id', auth, async (req, res) => {
         //     new: true,
         //     runValidators: true
         // })
-        const task = await Task.findOne({_id,  creator: req.user._id})
+        const task = await Task.findOne({
+            _id,
+            creator: req.user._id
+        })
         updates.forEach(update => task[update] = req.body[update])
         task.save()
         res.status(200).send(task)
@@ -77,7 +94,10 @@ router.delete('/tasks/:id', auth, async (req, res) => {
     const _id = req.params.id
     try {
 
-        const task = await Task.findOneAndDelete({_id, creator: req.user._id})
+        const task = await Task.findOneAndDelete({
+            _id,
+            creator: req.user._id
+        })
         if (!task) {
             return res.status(404).send()
         }
