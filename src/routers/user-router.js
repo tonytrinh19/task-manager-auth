@@ -3,9 +3,22 @@ const router = new express.Router()
 
 const User = require('../models/user')
 const auth = require('../middleware/auth')
-const { update } = require('../models/user')
+const {
+    update
+} = require('../models/user')
 const multer = require('multer')
-const upload = multer({ dest: 'avatars'})
+const upload = multer({
+    dest: 'avatars',
+    limits: {
+        fileSize: 1000000
+    },
+    fileFilter(req, file, cb) {
+        if (!file.originalname.match(/\.(jpeg|jpg|png)$/gm)) {
+            cb(new Error('Incorrect file type uploaded. Only jpeg/jpg/png allowed.'))
+        }
+        cb(null, true)
+    }
+})
 
 router.post('/users', async (req, res) => {
     const user = new User(req.body)
@@ -109,8 +122,9 @@ router.delete('/users/me', auth, async (req, res) => {
     }
 })
 
+// Accepts files, saves in 'avatars' folder. File size limit 1MB,
+// only accepts file extensions png/jpeg/jpg.
 router.post('/users/me/avatar', upload.single('avatar'), (req, res) => {
-
     res.send()
 })
 
