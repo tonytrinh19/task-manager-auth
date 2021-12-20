@@ -63,12 +63,15 @@ userSchema.virtual('tasks', {
     foreignField: 'creator'
 })
 
+// Controls what will be sent back when sending back
+// user's information.
 userSchema.methods.toJSON = function () {
     const user = this
     const userObject = user.toObject()
     // hide private data
     delete userObject.password
     delete userObject.tokens
+    delete userObject.avatar
 
     return userObject
 }
