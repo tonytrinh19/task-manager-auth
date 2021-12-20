@@ -38,7 +38,7 @@ router.get('/tasks', auth, async (req, res) => {
 
         if (req.query.sortBy) {
             const strings = req.query.sortBy.split(':')
-            sort.strings[0] = strings[1] === 'asc' ? 1 : -1 
+            sort[strings[0]] = strings[1] === 'asc' ? 1 : -1 
         }
 
         await req.user.populate({

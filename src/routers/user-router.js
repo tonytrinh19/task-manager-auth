@@ -133,4 +133,17 @@ router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) 
     })
 })
 
+// Delete the user's avatar
+router.delete('/users/me/avatar', auth, async (req, res) => {
+    try {
+        req.user.avatar = undefined
+        await req.user.save()
+        res.send()
+    } catch (error) {
+        res.status(400).send({
+            error
+        })
+    }
+})
+
 module.exports = router
