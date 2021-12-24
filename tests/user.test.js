@@ -103,5 +103,28 @@ test('Should upload avatar image', async () => {
         .attach('avatar', 'tests/fixtures/profile-pic.png')
         .expect(200)
 
-    
+    const user = await User.findById(userTestId)
+    expect(user.avatar).toEqual(expect.any(Buffer))
+})
+
+test('Should update valid user fields', async () => {
+    await request(app)
+        .patch('/users/me')
+        .set('Authorization', `Bearer ${userTest.tokens[0].token}`)
+        .send({
+            name: 'Toni'
+        }).expect(200)
+
+    const user = await User.findById(userTestId)
+    expect(user.name).toBe('Toni')
+})
+
+test('Should not update invalid user fields', async () => {
+    await request(app)
+        .patch('/users/me')
+        .set('Authorization', `Bearer ${userTest.tokens[0].token}`)
+        .send({
+            nickname: 'Bob'
+        })
+        .expect(400)
 })
