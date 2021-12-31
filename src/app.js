@@ -6,6 +6,7 @@ const publicDirectory = path.join(__dirname, '../public')
 const viewsDirectory = path.join(__dirname, '../templates/views')
 const partialsDirectory = path.join(__dirname, '../templates/partials')
 
+app.use(express.static(publicDirectory))
 app.set('view engine', 'ejs')
 app.set('views', viewsDirectory)
 
