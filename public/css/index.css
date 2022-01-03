@@ -9,6 +9,16 @@ body {
     border: 0;
 }
 
+#login__message {
+    margin-bottom: 0px;;
+}
+
+#login__link {
+    text-decoration: none;
+    font-weight: bold;
+    color: black
+}
+
 .main {
     display: flex;
     justify-content: center;
