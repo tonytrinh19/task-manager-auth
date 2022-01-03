@@ -18,6 +18,11 @@ const upload  = multer({
     }
 })
 
+// Displays sign up Page
+router.get('/signup', async (req, res) => {
+    res.render('signup')
+})
+
 router.post('/users', async (req, res) => {
     // Same as User.create(req.body, {})
     const user = new User(req.body)

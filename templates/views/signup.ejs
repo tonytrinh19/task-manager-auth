@@ -14,13 +14,11 @@
                 <span>Use your credentials to log in.</span>
             </div>
             <div class="login-form">
-                <form action="users/login" method="POST">
+                <form action="users" method="POST">
                     <input class="form-control" name="email" type="email" placeholder="Email" required>
+                    <input class="form-control" name="name" type="text" placeholder="Username" required>
                     <input class="form-control" name="password" type="password" placeholder="Password" required>
-                    <input class="form-enter" type="submit" value="Login">
-                </form>
-                <form action="signup" method="GET">
-                    <input class="form-enter" type="submit" value="Sign Up">
+                    <input class="form-enter" type="submit" value="Signup">
                 </form>
             </div>
         </div>

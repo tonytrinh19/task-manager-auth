@@ -3,12 +3,10 @@ const app = express()
 const path = require('path')
 
 const publicDirectory = path.join(__dirname, '../public')
-const imagesDirectory = path.join(__dirname, '../images')
 const viewsDirectory = path.join(__dirname, '../templates/views')
 const partialsDirectory = path.join(__dirname, '../templates/partials')
 
 app.use(express.static(publicDirectory))
-app.use(express.static(imagesDirectory))
 app.set('view engine', 'ejs')
 app.set('views', viewsDirectory)
 
