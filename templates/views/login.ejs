@@ -10,23 +10,22 @@
     <div class="main">
         <div class="login-box">
             <div class="text-login">
-                <p>Signup</p>
+                <p>Login</p>
+                <span>Use your credentials to log in.</span>
             </div>
             <div class="login-form">
-                <form action="users" method="POST">
+                <form action="users/login" method="POST">
                     <input class="form-control" name="email" type="email" placeholder="Email" required>
-                    <input class="form-control" name="name" type="text" placeholder="Username" required>
                     <input class="form-control" name="password" type="password" placeholder="Password" required>
-                    <p id="login__message">
-                        Already a member? <a id="login__link" href="/" >Log in!</a>
-                    </p>
+                    <input class="form-enter button" type="submit" value="Login">
+                </form>
+                <form action="signup" method="GET">
                     <input class="form-enter button" type="submit" value="Sign Up">
                 </form>
             </div>
         </div>
     </div>
     <%- include("../partials/footer.ejs") %>
-    <script src="js/signup.js"></script>
 </body>
 
 </html>

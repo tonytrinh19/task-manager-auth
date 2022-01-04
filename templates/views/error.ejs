@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include("../partials/header.ejs") %>
+    <link rel="stylesheet" type="text/css" href="css/error.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.3.0/snap.svg-min.js"></script>
+</head>
+
+<body>
+    <div class="content">
+        <svg viewBox="0 0 960 300">
+            <symbol id="s-text">
+                <text text-anchor="middle" x="50%" y="50%">404</text>
+            </symbol>
+
+            <g class="g-ants">
+                <use xlink:href="#s-text" class="text"></use>
+                <use xlink:href="#s-text" class="text"></use>
+                <use xlink:href="#s-text" class="text"></use>
+                <use xlink:href="#s-text" class="text"></use>
+                <use xlink:href="#s-text" class="text"></use>
+            </g>
+        </svg>
+    </div>
+    <script src="js/error.js"></script>
+    <%- include("../partials/footer.ejs") %>
+</body>
+
+</html>

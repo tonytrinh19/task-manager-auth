@@ -6,6 +6,8 @@
     padding: 1rem;
     background-color: #efefef;
     text-align: center;
+    font-weight: 800;
+    font-family: cursive;
   }
 
   .button {

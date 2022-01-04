@@ -18,11 +18,7 @@ const upload  = multer({
     }
 })
 
-// Displays sign up Page
-router.get('/signup', async (req, res) => {
-    res.render('signup')
-})
-
+// Sends new user info
 router.post('/users', async (req, res) => {
     // Same as User.create(req.body, {})
     const user = new User(req.body)
@@ -31,12 +27,9 @@ router.post('/users', async (req, res) => {
         await user.save()
         sendWelcomeEmail(user.email, user.name)
         const token = await user.generateAuthToken()
-        res.status(201).send({
-            user,
-            token
-        })
+        res.status(201).render('index.ejs')
     } catch (error) {
-        res.status(400).send(error)
+        res.status(400).render('error', { error })
     }
 
     // user.save().then(user => {
@@ -49,12 +42,9 @@ router.post('/users/login', async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
         const token = await user.generateAuthToken()
-        res.status(200).send({
-            user,
-            token
-        })
+        res.status(200).render('index')
     } catch (error) {
-        res.status(400).send()
+        res.status(400).render('error')
     }
 })
 
