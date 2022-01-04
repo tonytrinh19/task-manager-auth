@@ -7,3 +7,7 @@
     background-color: #efefef;
     text-align: center;
   }
+
+  .button {
+    cursor: pointer;
+}
