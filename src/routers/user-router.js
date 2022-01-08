@@ -163,4 +163,8 @@ router.get('/users/:id/avatar', async (req, res) => {
     }
 })
 
+router.get('*', (req, res) => {
+    res.status(404).render('error')
+})
+
 module.exports = router

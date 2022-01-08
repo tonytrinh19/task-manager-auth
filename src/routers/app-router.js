@@ -12,8 +12,4 @@ router.get('/signup', async (req, res) => {
     res.render('signup')
 })
 
-router.get('*', (req, res) => {
-    res.render('error')
-})
-
 module.exports = router
