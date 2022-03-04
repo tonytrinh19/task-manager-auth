@@ -23,8 +23,8 @@ const viewsDirectory = path.join(__dirname, "../templates/views");
 
 app.use(express.static(publicDirectory));
 app.use(cors());
-app.set("view engine", "ejs");
-app.set("views", viewsDirectory);
+// app.set("view engine", "ejs");
+// app.set("views", viewsDirectory);
 
 require("./db/mongoose.js");
 const appRouter = require("./routers/app-router");
