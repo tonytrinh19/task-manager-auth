@@ -19,6 +19,17 @@ const upload  = multer({
 })
 
 // Sends new user info
+/**
+ * @swagger
+ * /users:
+ *  get:
+ *      description: Use to register new users
+ *      responses:
+ *         '201':
+ *              description: Successful created new user
+ *         '400':
+ *              description: Unable to create new user
+ */
 router.post('/users', async (req, res) => {
     // Same as User.create(req.body, {})
     const user = new User(req.body)
