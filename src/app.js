@@ -18,10 +18,10 @@ const swaggerUi = require("swagger-ui-express");
 //     apis: ['app.js']
 // }
 
-const publicDirectory = path.join(__dirname, "../public");
-const viewsDirectory = path.join(__dirname, "../templates/views");
+// const publicDirectory = path.join(__dirname, "../public");
+// const viewsDirectory = path.join(__dirname, "../templates/views");
 
-app.use(express.static(publicDirectory));
+// app.use(express.static(publicDirectory));
 app.use(cors());
 // app.set("view engine", "ejs");
 // app.set("views", viewsDirectory);
@@ -50,7 +50,7 @@ const taskRouter = require("./routers/task-router");
 
 app.use(express.json());
 app.use(express.urlencoded());
-app.use(appRouter);
+// app.use(appRouter);
 app.use(userRouter);
 app.use(taskRouter);
 

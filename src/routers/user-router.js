@@ -70,7 +70,7 @@ router.post("/users/logout", auth, async (req, res) => {
     await req.user.save();
     res.send();
   } catch (error) {
-    res.status(500).send();
+    res.status(500).send(error);
   }
 });
 
@@ -80,7 +80,7 @@ router.post("/users/logoutAll", auth, async (req, res) => {
     await req.user.save();
     res.send();
   } catch (error) {
-    res.status(500).send();
+    res.status(500).send(error);
   }
 });
 
@@ -132,7 +132,7 @@ router.delete("/users/me", auth, async (req, res) => {
     sendFarewellEmail(req.user.email, req.user.name);
     res.send(req.user);
   } catch (error) {
-    res.status(500).send();
+    res.status(500).send(error);
   }
 });
 
@@ -187,10 +187,6 @@ router.get("/users/:id/avatar", async (req, res) => {
   } catch (error) {
     res.status(404).send({ error: error.message });
   }
-});
-
-router.get("*", (req, res) => {
-  res.status(404).render("error");
 });
 
 module.exports = router;
