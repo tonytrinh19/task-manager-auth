@@ -2,55 +2,34 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const cors = require("cors");
-const swaggerJsDoc = require("swagger-jsdoc");
-const swaggerUi = require("swagger-ui-express");
-// const swaggerOptions = {
-//     swaggerDefinition: {
-//         info: {
-//             title: 'Task Manager API',
-//             description: 'Task Manager API Infomation',
-//             contact: {
-//                 email: 'tony@trinh.in'
-//             },
-//             version: 'v1.0'
-//         }
-//     },
-//     apis: ['app.js']
-// }
-
-// const publicDirectory = path.join(__dirname, "../public");
-// const viewsDirectory = path.join(__dirname, "../templates/views");
-
-// app.use(express.static(publicDirectory));
-app.use(cors());
-// app.set("view engine", "ejs");
-// app.set("views", viewsDirectory);
+const swaggerUI = require("swagger-ui-express");
+const swaggerJsdoc = require("swagger-jsdoc");
 
 require("./db/mongoose.js");
-const appRouter = require("./routers/app-router");
 const userRouter = require("./routers/user-router");
 const taskRouter = require("./routers/task-router");
 
-// const swaggerDocs = swaggerJsDoc(swaggerOptions)
+const options = {
+  swaggerDefinition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Task Manager API",
+      version: "1.0.0",
+      description: "A simple express library API",
+    },
+    servers: [
+      {
+        url: `http://localhost:1234`,
+        description: "Development server",
+      },
+    ],
+  },
+  apis: ["./src/routers/**.js"],
+};
 
-// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
-// console.log(swaggerDocs)
-/**
- * @swagger
- * /hey:
- *  get:
- *      description: Use to register new users
- *      responses:
- *          '200':
- *              description: Successful created new user
- */
-// app.get('/hey', (req, res) => {
-//     res.status(200).send()
-// })
-
-app.use(express.json());
-app.use(express.urlencoded());
-// app.use(appRouter);
+const specs = swaggerJsdoc(options);
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
+app.use(cors());
 app.use(userRouter);
 app.use(taskRouter);
 

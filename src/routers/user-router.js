@@ -18,17 +18,43 @@ const upload = multer({
   },
 });
 
-// Sends new user info
 /**
  * @swagger
+ * tags:
+ *  - name: Users
+ *    description: User management and login
+ */
+
+/**
+ * @swagger
+ *
  * /users:
- *  get:
- *      description: Use to register new users
+ *    post:
+ *      description: Register a new account
+ *      tags: [Users]
+ *      produces:
+ *        - application/json
+ *      parameters:
+ *        - name: name
+ *          description: User's full name
+ *          required: true
+ *          in: urlEncoded
+ *          type: string
+ *        - name: password
+ *          description: User's password
+ *          required: true
+ *          type: string
+ *          in: urlEncoded
+ *        - name: email
+ *          description: User's email
+ *          required: true
+ *          in: urlEncoded
+ *          type: string
  *      responses:
- *         '201':
- *              description: Successful created new user
- *         '400':
- *              description: Unable to create new user
+ *        201:
+ *          description: Successfully created account
+ *        400:
+ *          description: An error occurred
  */
 router.post("/users", async (req, res) => {
   // Same as User.create(req.body, {})
@@ -42,14 +68,36 @@ router.post("/users", async (req, res) => {
   } catch (error) {
     res.status(400).send(error);
   }
-
-  // user.save().then(user => {
-  //     res.status(201).send(user)
-  // }).catch(error => res.status(400).send(error))
 });
 
+/**
+ * @swagger
+ *
+ * /users/login:
+ *    post:
+ *      description: Log in an account
+ *      tags: [Users]
+ *      produces:
+ *        - application/json
+ *      parameters:
+ *        - name: password
+ *          description: User's password
+ *          required: true
+ *          type: string
+ *          in: urlEncoded
+ *        - name: email
+ *          description: User's email
+ *          required: true
+ *          in: urlEncoded
+ *          type: string
+ *      responses:
+ *        200:
+ *          description: Successfully logged in
+ *        400:
+ *          description: An error occurred
+ */
 router.post("/users/login", async (req, res) => {
-  res.setHeader("X-Powered-By", "Tony Trinh's Mind");
+  res.setHeader("X-Powered-By", "Tony Trinh's API");
   try {
     const user = await User.findByCredentials(
       req.body.email,
@@ -62,6 +110,23 @@ router.post("/users/login", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ *
+ * /users/logout:
+ *    post:
+ *      description: Log out current session
+ *      tags: [Users]
+ *      produces:
+ *        - application/json
+ *      responses:
+ *        200:
+ *          description: Successfully logged out
+ *        401:
+ *          description: Unauthorized
+ *        500:
+ *          description: A server error occurred
+ */
 router.post("/users/logout", auth, async (req, res) => {
   try {
     req.user.tokens = req.user.tokens.filter(
@@ -74,6 +139,23 @@ router.post("/users/logout", auth, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ *
+ * /users/logout:
+ *    post:
+ *      description: Log out of all sessions
+ *      tags: [Users]
+ *      produces:
+ *        - application/json
+ *      responses:
+ *        200:
+ *          description: Successfully logged out
+ *        401:
+ *          description: Unauthorized
+ *        500:
+ *          description: A server error occurred
+ */
 router.post("/users/logoutAll", auth, async (req, res) => {
   try {
     req.user.tokens = [];
@@ -84,24 +166,61 @@ router.post("/users/logoutAll", auth, async (req, res) => {
   }
 });
 
-// Get user's profile
+/**
+ * @swagger
+ *
+ * /users/me:
+ *    get:
+ *      description: Get user's profile information
+ *      tags: [Users]
+ *      produces:
+ *        - application/json
+ *      responses:
+ *        200:
+ *          description: User's profile
+ *        401:
+ *          description: Unauthorized
+ */
 router.get("/users/me", auth, async (req, res) => {
   res.setHeader("X-Powered-By", "Toni");
   res.send(req.user);
 });
 
-// Get one user with ObjectID, deprecated, for dev only
-// router.get('/users/:id', async (req, res) => {
-//     const _id = req.params.id
-
-//     try {
-//         const user = await User.findById(_id)
-//         res.status(200).send(user)
-//     } catch (error) {
-//         res.status(500).send(error)
-//     }
-// })
-
+/**
+ * @swagger
+ *
+ * /users/me:
+ *    patch:
+ *      description: Update user's profile
+ *      tags: [Users]
+ *      produces:
+ *        - application/json
+ *      parameters:
+ *        - name: name
+ *          description: User's full name
+ *          required: true
+ *          in: urlEncoded
+ *          type: string
+ *        - name: password
+ *          description: User's password
+ *          required: true
+ *          type: string
+ *          in: urlEncoded
+ *        - name: email
+ *          description: User's email
+ *          required: true
+ *          in: urlEncoded
+ *          type: string
+ *      responses:
+ *        200:
+ *          description: User's profile
+ *        401:
+ *          description: Unauthorized
+ *        400:
+ *          description: Invalid update fields
+ *        404:
+ *          description: An error occurred
+ */
 router.patch("/users/me", auth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ["name", "email", "password", "age"];
@@ -118,7 +237,6 @@ router.patch("/users/me", auth, async (req, res) => {
   try {
     updates.forEach((update) => (req.user[update] = req.body[update]));
     await req.user.save();
-    // const user = await User.findByIdAndUpdate(_id, req.body, {new: true, runValidators: true})
     res.status(200).send(req.user);
   } catch (error) {
     res.status(404).send(error);
