@@ -29,7 +29,25 @@ const options = {
 
 const specs = swaggerJsdoc(options);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
-app.use(cors());
+app.use(express.urlencoded());
+app.use(express.json());
+app.use(
+  cors({
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header(
+//     "Access-Control-Allow-Methods",
+//     "POST, PUT, PATCH, GET, DELETE, OPTIONS"
+//   );
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Api-Key, X-Requested-With, Content-Type, Accept, Authorization"
+//   );
+//   next();
+// });
 app.use(userRouter);
 app.use(taskRouter);
 

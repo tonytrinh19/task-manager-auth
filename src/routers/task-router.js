@@ -4,9 +4,42 @@ const auth = require("../middleware/auth");
 
 const Task = require("../models/task");
 
-router.post("/tasks", auth, async (req, res) => {
-  // const task = new Task(req.body)
+/**
+ * @swagger
+ * tags:
+ *  - name: Tasks
+ *    description: Tasks creation and management
+ */
 
+/**
+ * @swagger
+ *
+ * /tasks:
+ *    post:
+ *      description: Add a new task
+ *      tags: [Tasks]
+ *      produces:
+ *        - application/json
+ *      parameters:
+ *        - name: description
+ *          description: Task's description
+ *          required: true
+ *          in: urlEncoded
+ *          type: string
+ *        - name: completed
+ *          description: Completion state of the task
+ *          required: false
+ *          type: boolean
+ *          in: urlEncoded
+ *      responses:
+ *        201:
+ *          description: Successfully added a task
+ *        401:
+ *          description: Unauthorized
+ *        400:
+ *          description: An error occurred
+ */
+router.post("/tasks", auth, async (req, res) => {
   const task = new Task({
     ...req.body,
     creator: req.user._id,
@@ -18,12 +51,28 @@ router.post("/tasks", auth, async (req, res) => {
   } catch (error) {
     res.status(400).send(error);
   }
-  // task.save().then(task => res.status(201).send(task)).catch(error => res.status(400).send(error))
 });
 
 // GET /tasks?completed=true. Add filtering to the request pararms.
 // GET /tasks?limit=10&skip=10. Limit: number of queries per page, skip: number of queries skipped.
 // GET /tasks/sortBy=createdAt:asc. Sort params.
+/**
+ * @swagger
+ *
+ * /tasks:
+ *    post:
+ *      description: Find all tasks belong to the current logged in user
+ *      tags: [Tasks]
+ *      produces:
+ *        - application/json
+ *      responses:
+ *        200:
+ *          description: The tasks
+ *        401:
+ *          description: Unauthorized
+ *        500:
+ *          description: A server error occurred
+ */
 router.get("/tasks", auth, async (req, res) => {
   try {
     // authenticate the user logged in, only show tasks that belong to currently logged in user
@@ -59,6 +108,34 @@ router.get("/tasks", auth, async (req, res) => {
   // Task.find({}).then(tasks => res.send(tasks)).catch(error => res.status(500).send())
 });
 
+/**
+ * @swagger
+ *
+ * /tasks:
+ *    post:
+ *      description: Find a task by task's id
+ *      tags: [Tasks]
+ *      produces:
+ *        - application/json
+ *      parameters:
+ *        - name: description
+ *          description: Task's description
+ *          required: true
+ *          in: urlEncoded
+ *          type: string
+ *        - name: completed
+ *          description: Completion state of the task
+ *          required: false
+ *          type: boolean
+ *          in: urlEncoded
+ *      responses:
+ *        200:
+ *          description: The task
+ *        401:
+ *          description: Unauthorized
+ *        404:
+ *          description: An error occurred
+ */
 router.get("/tasks/:id", auth, async (req, res) => {
   const _id = req.params.id;
   try {
@@ -71,7 +148,6 @@ router.get("/tasks/:id", auth, async (req, res) => {
   } catch (error) {
     res.status(404).send(error);
   }
-  // Task.findById(_id).then(task => res.send(task)).catch(error => res.status(404).send())
 });
 
 router.patch("/tasks/:id", auth, async (req, res) => {
